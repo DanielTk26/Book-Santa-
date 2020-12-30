@@ -1,22 +1,22 @@
 import React from 'react';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
-import BookRequestScreen  from './screens/BookRequestScreen';
+
+//importing screens from screens folder
+
 import WelcomeScreen from './screens/WelcomeScreen';
-import BookDonateScreen from './screens/BookDonateScreen'
-import {AppTabNavigator} from '/components/AppTabNavigator'
+import {AppDrawerNavigator} from './components/AppDrawerNavigator'
+
 
 export default function App() {
     return(
-       <AppConatiner/>
+      <AppContainer/>
     );
 }
 
-const switchNavigator = createSwitchNavigator({
-    WelcomeScreen:{screen: WelcomeScreen},
-    BookRequestScreen:{screen: BookRequestScreen},
-    BookDonateScreen:{screen: BookDonateScreen},
-    BottomTab:{screen: AppTabNavigator}
-})  
 
-const AppConatiner = createAppContainer(switchNavigator);
+const switchNavigator = createSwitchNavigator({
+    WelcomeScreen:{screens: WelcomeScreen},
+    Drawer:{screens: AppDrawerNavigator}
+})
+
+const AppContainer = createAppContainer(switchNavigator);
