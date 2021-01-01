@@ -50,7 +50,7 @@ updateUserDetails=()=>{
     .update({
         "first_name":this.state.firstName,
         "last_name":this.state.lastName,
-        "address":thi.state.address,
+        "address":this.state.address,
         "contact":this.state.contact,
     })
 
