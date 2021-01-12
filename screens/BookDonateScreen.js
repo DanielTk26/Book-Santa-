@@ -100,3 +100,35 @@ const styles = StyleSheet.create({
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//https://www.youtube.com/watch?v=6G6gGqPWbA4

@@ -17,11 +17,11 @@ export default class RecieverDetailsScreen extends Component{
             recieverName: '',
             recieverContact:'',
             recieverAddress:'',
-            recieverRequestDicId:''
+            recieverRequestDocId:''
         }
     }
 
-    getReieverDetails(){
+    getRecieverDetails(){
         db.collection('users').where('email_id','==',this.state.recieverId).get()
   .then(snapshot=>{
     snapshot.forEach(doc=>{
@@ -40,6 +40,17 @@ export default class RecieverDetailsScreen extends Component{
    })
 })}
 
+ getUserDetails=(userId)=>{
+   db.collection("users").where('email_id','==',userId).get()
+   .then((snapshot)=>{
+     snapshot.forEach((doc)=>{
+       this.setState({
+         userName:doc.data().first_name+" "+doc.data().last_name
+       })
+     })
+   })
+ }
+
 updateBookStatus=()=>{
   db.collection('all_donations').add({
     book_name           : this.state.bookName,
@@ -51,8 +62,22 @@ updateBookStatus=()=>{
 
 }
 
+ addNotification=()=>{
+   var message = this.state.userName + " has shown interest in donating the book."
+   db.collection("all_notification").add({
+     "target_user_id":this.state.recieverId,
+     "donor_id":this.state.userId,
+     "request_id":this.state.requestId,
+     "book_name":this.state.bookName,
+     "date":firebase.firestore.FieldValue.serverTimeStamp(),
+     "notification_status":"unread",
+     "message":message
+   })
+ }
+
 componentDidMount(){
     this.getReieverDetails()
+    this.getUserDetails(this.state.userId)
 }
 
 
