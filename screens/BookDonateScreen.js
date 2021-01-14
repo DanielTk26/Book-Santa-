@@ -1,60 +1,65 @@
-import React, {Component} from 'react';
-import {View, StyleSheet, Text, Flatlist, TouchableOpacity} from 'react-native';
-import {ListItem} from 'react-native-elements'
+import React, { Component } from 'react';
+import { View, StyleSheet, Text, FlatList,TouchableOpacity } from 'react-native';
+import { ListItem } from 'react-native-elements'
 import firebase from 'firebase';
 import db from '../config'
 import MyHeader from '../components/MyHeader';
 
 export default class BookDonateScreen extends Component{
-    constructor(){
-        super()
-        this.state = {
-            requestedBookList : []
-        }
-        this.requestRef = null
+  constructor(){
+    super()
+    this.state = {
+      userId  : firebase.auth().currentUser.email,
+      requestedBooksList : []
     }
+  this.requestRef= null
+  }
 
-getRequestedBookList =()=>{
+  getRequestedBooksList =()=>{
     this.requestRef = db.collection("requested_books")
     .onSnapshot((snapshot)=>{
-        var requestedBookList = snapshot.docs.map(document => document.data());
-        this.setState({
-          requestedBookList: requestedBookList
-        });
+      var requestedBooksList = snapshot.docs.map((doc) => doc.data())
+      this.setState({
+        requestedBooksList : requestedBooksList
+      });
     })
-}
+  }
 
-componentDidMount(){
-    this.getRequestedBookList()
-}
+  componentDidMount(){
+    this.getRequestedBooksList()
+  }
 
-componentWillUnmount(){
+  componentWillUnmount(){
     this.requestRef();
-}
+  }
 
-keyExtractor=(item, index) => index.toString()
+  keyExtractor = (item, index) => index.toString()
 
- renderItem = ( {item, i} ) =>{
+  renderItem = ( {item, i} ) =>{
     return (
-        <ListItem
-          key={i}
-          title={item.book_name}
-          subtitle={item.reason_to_request}
-          titleStyle={{ color: 'black', fontWeight: 'bold' }}
-          rightElement={
-              <TouchableOpacity style={styles.button}>
-                <Text style={{color:'#ffff'}}>View</Text>
-              </TouchableOpacity>
-            }
-          bottomDivider
-        />
-      )
- }
+      <ListItem
+        key={i}
+        title={item.book_name}
+        subtitle={item.reason_to_request}
+        titleStyle={{ color: 'black', fontWeight: 'bold' }}
+        rightElement={
+            <TouchableOpacity style={styles.button}
+              onPress ={()=>{
+                this.props.navigation.navigate("RecieverDetails",{"details": item})
+              }}
+              >
+              <Text style={{color:'#ffff'}}>View</Text>
+            </TouchableOpacity>
+          }
+        bottomDivider
+      />
+    )
+  }
 
- render(){
+  render(){
     return(
       <View style={{flex:1}}>
-        <MyHeader title="Donate Books"/>
+        <MyHeader title="Donate Books" navigation ={this.props.navigation}/>
         <View style={{flex:1}}>
           {
             this.state.requestedBooksList.length === 0
@@ -78,57 +83,22 @@ keyExtractor=(item, index) => index.toString()
 }
 
 const styles = StyleSheet.create({
-    subContainer:{
-      flex:1,
-      fontSize: 20,
-      justifyContent:'center',
-      alignItems:'center'
-    },    button:{
-        width:100,
-        height:30,
-        justifyContent:'center',
-        alignItems:'center',
-        backgroundColor:"#ff5722",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 8
-        }
-    }
-  })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//https://www.youtube.com/watch?v=6G6gGqPWbA4
+  subContainer:{
+    flex:1,
+    fontSize: 20,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  button:{
+    width:100,
+    height:30,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:"#ff5722",
+    shadowColor: "#000",
+    shadowOffset: {
+       width: 0,
+       height: 8
+     }
+  }
+})
